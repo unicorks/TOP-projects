@@ -6,8 +6,11 @@ img {
   }
 
 body {
-    text-align:center;
     font-family:'Times New Roman', Times, serif;
     background-color:beige;
     color:black
+}
+
+p, h1 {
+    text-align:center;
 }
