@@ -52,6 +52,7 @@ nav li {
 }
 
 a, a:hover {color: inherit}
+a:hover {text-decoration: underline;}
 
 .section-2 {
     padding: 30px 200px;
@@ -66,7 +67,7 @@ a, a:hover {color: inherit}
 }
 
 .section-3 {
-    padding: 50px 250px;
+    padding: 90px 250px;
     background-color: #d6c6ff;
     font-style: italic;
 }
@@ -76,3 +77,35 @@ a, a:hover {color: inherit}
     font-size: 170%;
     font-style: normal;
 }
+
+.section-4 {
+    padding: 70px 180px;
+    background-color: #f497dc;
+}
+
+.subsection-2 {
+    padding: 20px 70px;
+    background-color: #c70c76;
+    color:rgb(255, 199, 252);
+    font-size: 120%;
+    border-radius: 15px;
+}
+
+button {
+    background-color: #c70c76;
+    color:rgb(255, 199, 252);
+    padding: 5px 8px;
+    border: 2px solid #5a834e;
+    font-size: 120%;
+    border-radius: 8px;
+}
+button:hover {background-color: #ec1890;}
+
+footer {
+    padding: 25px 250px;
+    text-align: center;
+    background-color: #96092c;
+    color: bisque;
+}
+
+footer a  {text-decoration: none;}
