@@ -22,8 +22,8 @@ body {
 }
 
 .flower {
-    width: 200px;
-    height: 200px;
+    width: 150px;
+    height: 150px;
     border: 5px solid #8e3a89;
     margin: 10px;
 }
@@ -52,3 +52,27 @@ nav li {
 }
 
 a, a:hover {color: inherit}
+
+.section-2 {
+    padding: 30px 200px;
+    background-color: #f497dc;
+    text-align: center;
+}
+
+.fact {
+    flex: 1 1 auto;
+    margin: 10px;
+    text-align: center;
+}
+
+.section-3 {
+    padding: 50px 250px;
+    background-color: #d6c6ff;
+    font-style: italic;
+}
+
+.right-align {
+    text-align: right;
+    font-size: 170%;
+    font-style: normal;
+}
