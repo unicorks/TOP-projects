@@ -78,10 +78,10 @@
                 document.querySelector('#body1').style.display = 'none'
                 document.querySelector('#body2').style.display = 'block'
                 if (compScore > playerScore) {
-                    document.querySelector("#game-result").innerHTML = `The computer won with ${compScore} points. Your final score was ${playerScore}`
+                    document.querySelector("#game-result").innerHTML = `The computer won with ${compScore} points. Your final score was ${playerScore}.`
                 }
                 else if (compScore < playerScore) {
-                    document.querySelector("#game-result").innerHTML = `You won with ${playerScore} points. The computer's final score was ${compScore}`
+                    document.querySelector("#game-result").innerHTML = `You won with ${playerScore} points. The computer's final score was ${compScore}.`
                 }
                 else {
                     document.querySelector("#game-result").innerHTML = 'The game resulted in a draw.'
