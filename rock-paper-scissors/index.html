@@ -4,30 +4,33 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <title>Rock Paper Scissors!</title>
 </head>
 <body>
 <div id="body1" style="display:block">
     <h1>Play a game of rock, paper and scissors against the computer!</h1>
     <p>Press R for rock, P for paper and S for scissors.</p>
-    <table>
+    <table class="table text-center">
+        <thead class="thead-dark">
         <tr>
         <th>YOU</th>
         <th>COMPUTER</th>
         </tr>
+        </thead>
         <tr>
             <td id="player-score">Score: 0</td>
             <td id="comp-score">Score: 0</td>
         </tr>
         <tr>
-            <td rowspan="2">
+            <td colspan="2">
                 <button id="rock">R</button>
                 <button id="paper">P</button>
                 <button id="scissors">S</button>
             </td>
         </tr>
         <tr>
-            <td rowspan="2" id="result">The round's result will show up here.</td>
+            <td colspan="2" id="result">The round's result will show up here.</td>
         </tr>
     </table>
 </div>
@@ -92,4 +95,14 @@
         }
     })
 </script>
+
+<style>
+    body {
+        font-size: x-large;
+    }
+    table, th, td {
+  border: 2px solid black;
+  table-layout: fixed;
+}
+</style>
 </html>
