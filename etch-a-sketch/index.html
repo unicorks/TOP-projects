@@ -1,0 +1,46 @@
+<!-- notes
+1. make grid in same space eg 960 pixels
+2. add hover wala event listener to change bg color of div
+3. add options for nice ui
+bg color picker, pen color picker, eraser, rainbow mode, make colors darker/lighter mode -->
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Etch-a-Sketch</title>
+</head>
+<body>
+    <div class="grid-container">
+    </div>
+</body>
+
+<script>
+    function createGrid(times, gridbox) {
+        for (let i = 0; i < (times*times); i++) {
+            const div = document.createElement("div")
+            div.classList.add('grid-item')
+            gridbox.appendChild(div);
+        }
+    }
+    const container = document.querySelector('.grid-container')
+    createGrid(10, container)
+    console.log('ok')
+</script>
+
+<style>
+    .grid-container {
+        display: grid;
+        background-color: #2196F3;
+        grid-template-rows: 10;
+        grid-template-columns: 10;
+    }
+    .grid-item {
+        border: 0.2px solid #000;
+        width: 20px;
+        height: 20px
+    }
+</style>
+</html>
