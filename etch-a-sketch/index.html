@@ -13,7 +13,23 @@ bg color picker, pen color picker, eraser, rainbow mode, make colors darker/ligh
     <title>Etch-a-Sketch</title>
 </head>
 <body>
-    <div class="grid-container">
+    <div class="flex-container1">
+        <div class="grid-container"></div>
+        <div class="flex-container2">
+            <div class="form-group">
+                <input autocomplete="off" autofocus class="form-control" class="side" placeholder="Grid dimensions" type="number">
+            </div>
+            <button class="btn btn-primary dim" type="submit">Create!</button>
+            <div class="form-group">
+                <label for="favcolor">Select cursor color:</label>
+                <input type="color" id="color">
+            </div>
+            <div class="form-group">
+                <label for="favcolor">Select background color:</label>
+                <input type="color" id="bgcolor">
+            </div>
+
+        </div>
     </div>
 </body>
 
@@ -22,25 +38,65 @@ bg color picker, pen color picker, eraser, rainbow mode, make colors darker/ligh
         for (let i = 0; i < (times*times); i++) {
             const div = document.createElement("div")
             div.classList.add('grid-item')
+            div.setAttribute('style', `border: ${times*(2/100)}px solid #AAA;`)
             gridbox.appendChild(div);
         }
+        let auto = 'auto '
+        gridbox.setAttribute('style', `grid-template-columns: ${auto.repeat(times).trimEnd()};`)
+        console.log('ok')
     }
+    function changeColor(color='black') {
+        let items = document.querySelectorAll('.grid-item')
+        items.forEach((item) => {
+            item.addEventListener('mouseover', () => {
+                item.setAttribute('style', `background-color: ${color} !important; border: ${color} !important`)
+            })
+        })
+    }
+
     const container = document.querySelector('.grid-container')
-    createGrid(10, container)
-    console.log('ok')
+    createGrid(20, container)
+    changeColor()
+
+    // makes grid of custom size
+    document.querySelector('.dim').addEventListener('click', function(){
+        let side = parseInt(document.querySelector('input.side').value)
+        container.replaceChildren()
+        createGrid(side, container)
+        changeColor()
+    })
+
+    let penColorInput = document.getElementById('color');
+    penColorInput.addEventListener('input', () =>{
+        changeColor(penColorInput.value)
+    });
+
+    let bgColorInput = document.getElementById('bgcolor');
+    bgColorInput.addEventListener('input', () =>{
+    let items = document.querySelectorAll('.grid-item')
+    items.forEach((item) => {
+        item.style.backgroundColor = bgColorInput.value
+    })
+    });
+
 </script>
 
 <style>
     .grid-container {
-        display: grid;
-        background-color: #2196F3;
-        grid-template-rows: 10;
-        grid-template-columns: 10;
+        display: inline-grid;
+        width: 480px;
+        height: 480px;
+        border: 2px solid black;
     }
     .grid-item {
-        border: 0.2px solid #000;
-        width: 20px;
-        height: 20px
+        background-color: aquamarine;
+    }
+    .flex-container1 {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        row-gap: 30px;
     }
 </style>
 </html>
