@@ -17,7 +17,7 @@ bg color picker, pen color picker, eraser, rainbow mode, make colors darker/ligh
         <div class="grid-container"></div>
         <div class="flex-container2">
             <div class="form-group">
-                <input autocomplete="off" autofocus class="form-control" class="side" placeholder="Grid dimensions" type="number">
+                <input autocomplete="off" autofocus class="form-control" id="side" placeholder="Grid dimensions" type="number">
             </div>
             <button class="btn btn-primary dim" type="submit">Create!</button>
             <div class="form-group">
@@ -34,16 +34,15 @@ bg color picker, pen color picker, eraser, rainbow mode, make colors darker/ligh
 </body>
 
 <script>
-    function createGrid(times, gridbox) {
+    function createGrid(times, gridbox, bgCol) {
         for (let i = 0; i < (times*times); i++) {
             const div = document.createElement("div")
             div.classList.add('grid-item')
-            div.setAttribute('style', `border: ${times*(2/100)}px solid #AAA;`)
+            div.setAttribute('style', `border: ${times*(2/100)}px solid #AAA; background-color: ${bgCol}`)
             gridbox.appendChild(div);
         }
         let auto = 'auto '
         gridbox.setAttribute('style', `grid-template-columns: ${auto.repeat(times).trimEnd()};`)
-        console.log('ok')
     }
     function changeColor(color='black') {
         let items = document.querySelectorAll('.grid-item')
@@ -55,14 +54,15 @@ bg color picker, pen color picker, eraser, rainbow mode, make colors darker/ligh
     }
 
     const container = document.querySelector('.grid-container')
-    createGrid(20, container)
+    createGrid(20, container, 'white')
     changeColor()
 
     // makes grid of custom size
     document.querySelector('.dim').addEventListener('click', function(){
-        let side = parseInt(document.querySelector('input.side').value)
+        let side = parseInt(document.getElementById('side').value)
         container.replaceChildren()
-        createGrid(side, container)
+        console.log(side)
+        createGrid(side, container, 'white')
         changeColor()
     })
 
@@ -73,10 +73,8 @@ bg color picker, pen color picker, eraser, rainbow mode, make colors darker/ligh
 
     let bgColorInput = document.getElementById('bgcolor');
     bgColorInput.addEventListener('input', () =>{
-    let items = document.querySelectorAll('.grid-item')
-    items.forEach((item) => {
-        item.style.backgroundColor = bgColorInput.value
-    })
+        container.replaceChildren()
+        createGrid(20, container, bgColorInput.value)
     });
 
 </script>
@@ -87,9 +85,6 @@ bg color picker, pen color picker, eraser, rainbow mode, make colors darker/ligh
         width: 480px;
         height: 480px;
         border: 2px solid black;
-    }
-    .grid-item {
-        background-color: aquamarine;
     }
     .flex-container1 {
         display: flex;
