@@ -75,6 +75,7 @@ bg color picker, pen color picker, eraser, rainbow mode, make colors darker/ligh
     bgColorInput.addEventListener('input', () =>{
         container.replaceChildren()
         createGrid(20, container, bgColorInput.value)
+        changeColor()
     });
 
 </script>
