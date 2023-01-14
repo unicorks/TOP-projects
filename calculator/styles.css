@@ -38,10 +38,6 @@ button {
     color:#2E382E;
 }
 
-.clear {
-    width: 170px
-}
-
 .number {
     background-color:#FFFF6C;
 }
@@ -50,6 +46,6 @@ button {
     background-color: #ADDDA5;
 }
 
-.clear, .backspace {
+.clear, .backspace, .equals {
     background-color: #E8B9AB
 }
