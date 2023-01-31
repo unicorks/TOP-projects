@@ -14,9 +14,9 @@ def bubble_sort(array)
         if iterations == true
             iterations = false
             next        
-       else
+        else
             break
-       end        
+        end
     end
     array
 end
