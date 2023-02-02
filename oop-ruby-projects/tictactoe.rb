@@ -85,6 +85,9 @@ while i < 9
     break if place.positive? && place < 10
   end
   tmp = board.grid
+  # check if place is occupied
+  next unless tmp[place - 1].is_a? Integer
+
   tmp[place - 1] = turn.symbol
   board.grid = tmp
   board.checkwin(turn)
