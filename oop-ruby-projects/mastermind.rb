@@ -25,11 +25,7 @@ class Game
       if code[i] == guess[i]
         hints.append('p')
       elsif code.include?(guess[i])
-        if (code.count(guess[i]) == guess.count(guess[i])) || (code.count(guess[i]) < guess.count(guess[i]) && (guess.index(guess[i]) == i))
-          hints.append('e')
-        else
-          hints.append('○')
-        end
+        hints.append('e')
       else
         hints.append('○')
       end
@@ -40,7 +36,7 @@ class Game
   def self.instructions
     puts "Hello and welcome to Mastermind on the command line against the computer!
 - Please enter your guess in the form '1234' where each digit of the guess is a number 1-6
-- There can be any duplicate digits in the code
+- There cannot be any duplicate digits in the code chosen by the computer
 - For the hints, 'p' will be shown for a perfect guess, 'e' will be shown for a guess which exists in the code
 - There are 12 maximum turns to guess the code
 - Guesses will be on the left and hints will be on the right of the game board
@@ -121,6 +117,10 @@ class Codemaker
   def initialize(name, code = [Random.rand(1..6), Random.rand(1..6), Random.rand(1..6), Random.rand(1..6)])
     @name = name
     @code = code
+    until @code.length == @code.uniq.length
+      @code.append(Random.rand(1..6))
+      @code = @code.uniq
+    end
   end
 end
 
