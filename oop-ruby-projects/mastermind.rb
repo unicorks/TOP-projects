@@ -13,7 +13,7 @@ class Game
       if code.length == 4 && (code.all? { |element| element.to_i >= 1 && element.to_i <= 6 })
         break
       else
-        puts "Enter valid code."
+        puts 'Enter valid code.'
       end
     end
     code.map(&:to_i)
@@ -56,10 +56,10 @@ What would you like to be? Enter 0 for codemaker and 1 for codebreaker."
       while turns <= 12
         puts "Turn #{turns}:"
         board.print
-        puts "Enter your guess: "
+        puts 'Enter your guess: '
         guess = Game.code_retriever
         if code.join == guess.join
-          puts "You win! Congrats."
+          puts 'You win! Congrats.'
           exit
         end
         guesses = board.guesses
@@ -81,7 +81,7 @@ What would you like to be? Enter 0 for codemaker and 1 for codebreaker."
         prev_guesses = board.guesses
         guess = turns != 1 ? codebreaker.next_guess(code, prev_guesses[turns - 2]) : [1, 1, 2, 2]
         if code.join == guess.join
-          puts "The computer guessed the code successfully."
+          puts 'The computer guessed the code successfully.'
           exit
         end
         guesses = board.guesses
@@ -92,7 +92,7 @@ What would you like to be? Enter 0 for codemaker and 1 for codebreaker."
         board.hints = hints
         turns += 1
       end
-      puts "The computer lost. Congratulations!"
+      puts 'The computer lost. Congratulations!'
     end
   end
 end
@@ -101,17 +101,17 @@ class Board
   attr_accessor :guesses, :hints
 
   def initialize
-    @guesses = Array.new(12, ["⬤", "⬤", "⬤", "⬤"])
-    @hints = Array.new(12, ["○", "○", "○", "○"])
+    @guesses = Array.new(12, ['⬤', '⬤', '⬤', '⬤'])
+    @hints = Array.new(12, ['○', '○', '○', '○'])
   end
 
   def print
-    puts "╔═════════════╦═════════╗"
+    puts '╔═════════════╦═════════╗'
     for i in 0..11 do
       puts "║ #{@guesses[i][0]}  #{@guesses[i][1]}  #{@guesses[i][2]}  #{@guesses[i][3]}  ║ #{@hints[i][0]} #{@hints[i][1]} #{@hints[i][2]} #{@hints[i][3]} ║"
-      puts "╠═════════════╬═════════╣" unless i == 11
+      puts '╠═════════════╬═════════╣' unless i == 11
     end
-    puts "╚═════════════╩═════════╝"
+    puts '╚═════════════╩═════════╝'
   end
 end
 
@@ -143,7 +143,7 @@ class Codebreaker
       elsif code.include?(prev_guess[i])
         # saves existing guess
         # the long condition is for a small complication which arises when there are duplicate digits in code
-        if (code.count(prev_guess[i]) == prev_guess.count(prev_guess[i])) || (code.count(prev_guess[i]) < prev_guess.count(prev_guess[i]) && (prev_guess.index(prev_guess[i]) == i))
+        if code.count(prev_guess[i]) == prev_guess.count(prev_guess[i])
           next_guess.append(prev_guess[i])
         else
           next_guess.append(Random.rand(1..6))
@@ -168,20 +168,20 @@ def start
   # know whether user will be codemaker or codebreaker
   while true
     choice = gets.chomp
-    if choice == "0" || choice == "1"
+    if %w[0 1].include?(choice)
       break
     else
-      puts "Enter valid choice."
+      puts 'Enter valid choice.'
     end
   end
 
   # get name, initialise class instances
   choice = choice.to_i
-  puts "Please enter your name: "
+  puts 'Please enter your name: '
   name_of_user = gets.chomp
   case choice
   when 0
-    puts "Enter your secret code."
+    puts 'Enter your secret code.'
     code = Game.code_retriever
     codebreaker = Codebreaker.new('computer')
     codemaker = Codemaker.new(name_of_user, code)
