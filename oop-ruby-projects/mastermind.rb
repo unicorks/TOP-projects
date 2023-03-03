@@ -13,7 +13,7 @@ class Game
   def self.code_retriever
     while true
       code = gets.chomp.split('')
-      if code.length == 4 && (code.all? {|element| element.to_i >= 1 && element.to_i <=8 })
+      if code.length == 4 && (code.all? {|element| element.to_i >= 1 && element.to_i <=6 })
         break
       else
         puts "Enter valid code."
@@ -28,7 +28,9 @@ class Game
       if code[i] == guess[i]
         hints.append('p')
       elsif code.include?(guess[i])
-        hints.append('e')
+        if (code.count(guess[i]) == guess.count(guess[i])) || (code.count(guess[i]) < guess.count(guess[i]) && (guess.index(guess[i]) == i))
+          hints.append('e')
+        end
       else
         hints.append('○')
       end
@@ -38,8 +40,8 @@ class Game
 
   def self.instructions
     puts "Hello and welcome to Mastermind on the command line against the computer!
-- Please enter your guess in the form '1234' where each digit of the guess is a number 1-8
-- There are NOT supposed to be any duplicate digits in the code
+- Please enter your guess in the form '1234' where each digit of the guess is a number 1-6
+- There can be any duplicate digits in the code
 - For the hints, 'p' will be shown for a perfect guess, 'e' will be shown for a guess which exists in the code
 - There are 12 maximum turns to guess the code
 - Guesses will be on the left and hints will be on the right of the game board
@@ -68,10 +70,29 @@ What would you like to be? Enter 0 for codemaker and 1 for codebreaker."
         board.hints = hints
         turns += 1
       end
-      puts "Oof, you lose. Better luck next time."
+      puts "Oof, you lose. Better luck next time. The code was #{code.join}"
       exit
     else
-      puts "Sorry, playing as the codemaker isn't available yet. Check back later."
+      turns = 1
+      code = codemaker.code
+      while turns <= 12
+        puts "Turn #{turns}:"
+        board.print
+        prev_guesses = board.guesses
+        guess = turns != 1 ? codebreaker.next_guess(code, prev_guesses[turns-2]) : [1, 1, 2, 2]
+        if code.join == guess.join
+          puts "The computer guessed the code successfully."
+          exit
+        end
+        guesses = board.guesses
+        guesses[turns-1] = guess
+        board.guesses = guesses
+        hints = board.hints
+        hints[turns-1] = give_hints(code, guess)
+        board.hints = hints
+        turns += 1
+      end
+      puts "The computer lost. Congratulations!"
     end
   end
 
@@ -98,9 +119,10 @@ end
 class Codemaker
   attr_reader :name, :code
 
-  def initialize(name, code=[Random.rand(1..8), Random.rand(1..8), Random.rand(1..8), Random.rand(1..8)])
+  def initialize(name, code=[Random.rand(1..6), Random.rand(1..6), Random.rand(1..6), Random.rand(1..6)])
     @name = name
     @code = code
+    end
   end
 end
 
@@ -110,6 +132,11 @@ class Codebreaker
   def initialize(name)
     @name = name
   end
+
+  def next_guess(code, prev_guess):
+    # fuck it imma implement my own computer strategy
+  end
+
 end
 
 def start
