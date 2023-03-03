@@ -30,6 +30,8 @@ class Game
       elsif code.include?(guess[i])
         if (code.count(guess[i]) == guess.count(guess[i])) || (code.count(guess[i]) < guess.count(guess[i]) && (guess.index(guess[i]) == i))
           hints.append('e')
+        else
+          hints.append('○')
         end
       else
         hints.append('○')
@@ -143,11 +145,14 @@ class Codebreaker
       elsif code.include?(prev_guess[i])
         if (code.count(prev_guess[i]) == prev_guess.count(prev_guess[i])) || (code.count(prev_guess[i]) < prev_guess.count(prev_guess[i]) && (prev_guess.index(prev_guess[i]) == i))
           next_guess.append(prev_guess[i])
+        else
+          next_guess.append(Random.rand(1..6))
         end
       else
         next_guess.append(Random.rand(1..6))
       end
     end
+    next_guess = next_guess.shuffle
 
     perfect_guesses.each do |k, v|
       next_guess.insert(v, k)
