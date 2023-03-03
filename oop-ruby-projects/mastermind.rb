@@ -122,7 +122,6 @@ class Codemaker
   def initialize(name, code=[Random.rand(1..6), Random.rand(1..6), Random.rand(1..6), Random.rand(1..6)])
     @name = name
     @code = code
-    end
   end
 end
 
@@ -133,8 +132,28 @@ class Codebreaker
     @name = name
   end
 
-  def next_guess(code, prev_guess):
-    # fuck it imma implement my own computer strategy
+  def next_guess(code, prev_guess)
+    # my own strategy (includes cheating lmao)
+    next_guess = []
+    perfect_guesses = {}
+
+    for i in 0..3
+      if code[i] == prev_guess[i]
+        perfect_guesses[prev_guess[i]] = i
+      elsif code.include?(prev_guess[i])
+        if (code.count(prev_guess[i]) == prev_guess.count(prev_guess[i])) || (code.count(prev_guess[i]) < prev_guess.count(prev_guess[i]) && (prev_guess.index(prev_guess[i]) == i))
+          next_guess.append(prev_guess[i])
+        end
+      else
+        next_guess.append(Random.rand(1..6))
+      end
+    end
+
+    perfect_guesses.each do |k, v|
+      next_guess.insert(v, k)
+    end
+
+    next_guess
   end
 
 end
@@ -156,6 +175,7 @@ def start
   puts "Please enter your name: "
   name_of_user = gets.chomp
   if choice == 0
+    puts "Enter your secret code."
     code = Game.code_retriever
     codebreaker = Codebreaker.new('computer')
     codemaker = Codemaker.new(name_of_user, code)
@@ -171,4 +191,3 @@ end
 
 
 start
-
