@@ -21,10 +21,16 @@ class Game
 
   def give_hints(code, guess)
     hints = []
+    code2 = code.dup
+    guess2 = guess.dup
     for i in 0..3
-      if code[i] == guess[i]
+      if code2[i] == guess[i]
+        code2[i] = 'A'
+        guess2[i] = 'A'
         hints.append('p')
-      elsif code.include?(guess[i])
+      elsif code2.include?(guess[i]) || code.count(guess[i]) == guess.count(guess[i])
+        code2[i] = 'A'
+        guess2[i] = 'A'
         hints.append('e')
       else
         hints.append('○')
@@ -36,7 +42,7 @@ class Game
   def self.instructions
     puts "Hello and welcome to Mastermind on the command line against the computer!
 - Please enter your guess in the form '1234' where each digit of the guess is a number 1-6
-- There cannot be any duplicate digits in the code chosen by the computer
+- There can be any duplicate digits in the code
 - For the hints, 'p' will be shown for a perfect guess, 'e' will be shown for a guess which exists in the code
 - There are 12 maximum turns to guess the code
 - Guesses will be on the left and hints will be on the right of the game board
@@ -54,10 +60,6 @@ What would you like to be? Enter 0 for codemaker and 1 for codebreaker."
         board.print
         puts 'Enter your guess: '
         guess = Game.code_retriever
-        if code.join == guess.join
-          puts 'You win! Congrats.'
-          exit
-        end
         guesses = board.guesses
         guesses[turns - 1] = guess
         board.guesses = guesses
@@ -65,6 +67,12 @@ What would you like to be? Enter 0 for codemaker and 1 for codebreaker."
         hints[turns - 1] = give_hints(code, guess)
         board.hints = hints
         turns += 1
+        if code.join == guess.join
+          puts "Turn #{turns}"
+          board.print
+          puts 'You win! Congrats.'
+          exit
+        end
       end
       puts "Oof, you lose. Better luck next time. The code was #{code.join}"
       exit
@@ -76,10 +84,6 @@ What would you like to be? Enter 0 for codemaker and 1 for codebreaker."
         board.print
         prev_guesses = board.guesses
         guess = turns != 1 ? codebreaker.next_guess(code, prev_guesses[turns - 2]) : [1, 1, 2, 2]
-        if code.join == guess.join
-          puts 'The computer guessed the code successfully.'
-          exit
-        end
         guesses = board.guesses
         guesses[turns - 1] = guess
         board.guesses = guesses
@@ -87,6 +91,12 @@ What would you like to be? Enter 0 for codemaker and 1 for codebreaker."
         hints[turns - 1] = give_hints(code, guess)
         board.hints = hints
         turns += 1
+        if code.join == guess.join
+          puts "Turn #{turns}"
+          board.print
+          puts 'The computer guessed the code successfully.'
+          exit
+        end
       end
       puts 'The computer lost. Congratulations!'
     end
@@ -117,10 +127,6 @@ class Codemaker
   def initialize(name, code = [Random.rand(1..6), Random.rand(1..6), Random.rand(1..6), Random.rand(1..6)])
     @name = name
     @code = code
-    until @code.length == @code.uniq.length
-      @code.append(Random.rand(1..6))
-      @code = @code.uniq
-    end
   end
 end
 
@@ -134,20 +140,22 @@ class Codebreaker
   def next_guess(code, prev_guess)
     # my own strategy (includes cheating lmao)
     next_guess = []
-    perfect_guesses = {}
+    code2 = code.dup
+    guess2 = prev_guess.dup
+    perfect_guesses = Hash.new([])
 
     for i in 0..3
-      if code[i] == prev_guess[i]
+      if code2[i] == prev_guess[i]
         # saves perfect guess as it is
-        perfect_guesses[prev_guess[i]] = i
-      elsif code.include?(prev_guess[i])
+        # fix this, put array in hash as value
+        code2[i] = 'A'
+        guess2[i] = 'A'
+        perfect_guesses[prev_guess[i]].append(i)
+      elsif code2.include?(prev_guess[i]) || code.count(prev_guess[i]) == prev_guess.count(prev_guess[i])
         # saves existing guess
-        # the long condition is for a small complication which arises when there are duplicate digits in code
-        if code.count(prev_guess[i]) == prev_guess.count(prev_guess[i])
-          next_guess.append(prev_guess[i])
-        else
-          next_guess.append(Random.rand(1..6))
-        end
+        code2[i] = 'A'
+        guess2[i] = 'A'
+        next_guess.append(prev_guess[i])
       else
         next_guess.append(Random.rand(1..6))
       end
@@ -156,7 +164,9 @@ class Codebreaker
 
     # puts perfect guesses at their right places
     perfect_guesses.each do |k, v|
-      next_guess.insert(v, k)
+      for i in v
+        next_guess.insert(i, k)
+      end
     end
 
     next_guess
