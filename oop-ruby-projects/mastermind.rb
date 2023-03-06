@@ -28,14 +28,25 @@ class Game
         code2[i] = 'A'
         guess2[i] = 'A'
         hints.append('p')
-      elsif code2.include?(guess[i]) || code.count(guess[i]) == guess.count(guess[i])
-        code2[i] = 'A'
-        guess2[i] = 'A'
-        hints.append('e')
-      else
-        hints.append('○')
       end
     end
+
+    code2 = code2.partition { |a| a != 'A' }[0]
+    guess2 = guess2.partition { |a| a != 'A' }[0]
+    code_e = code2.uniq
+    guess_e = guess2.uniq
+
+    for i in code_e
+      if guess_e.include?(i)
+        if code2.count(i) >= guess2.count(i)
+          hints.concat(Array.new(guess2.count(i), 'e'))
+        else
+          hints.concat(Array.new(code2.count(i), 'e'))
+        end
+      end
+    end
+    hints.concat(Array.new(4 - hints.length, '○'))
+
     hints.shuffle
   end
 
@@ -148,18 +159,29 @@ class Codebreaker
       if code2[i] == prev_guess[i]
         # saves perfect guess as it is
         # fix this, put array in hash as value
+        perfect_guesses[code2[i]] = perfect_guesses[code2[i]].append(i)
         code2[i] = 'A'
         guess2[i] = 'A'
-        perfect_guesses[prev_guess[i]].append(i)
-      elsif code2.include?(prev_guess[i]) || code.count(prev_guess[i]) == prev_guess.count(prev_guess[i])
-        # saves existing guess
-        code2[i] = 'A'
-        guess2[i] = 'A'
-        next_guess.append(prev_guess[i])
-      else
-        next_guess.append(Random.rand(1..6))
       end
     end
+    p perfect_guesses
+
+    code2 = code2.partition { |a| a != 'A' }[0]
+    guess2 = guess2.partition { |a| a != 'A' }[0]
+    code_e = code2.uniq
+    guess_e = guess2.uniq
+
+    for i in code_e
+      if guess_e.include?(i)
+        if code2.count(i) >= guess2.count(i)
+          next_guess.concat(Array.new(guess2.count(i), i))
+        else
+          next_guess.concat(Array.new(code2.count(i), i))
+        end
+      end
+    end
+    e = perfect_guesses.values.flatten.length
+    (4 - (next_guess.length + e)).times { next_guess.append(Random.rand(1..6)) }
     next_guess = next_guess.shuffle
 
     # puts perfect guesses at their right places
