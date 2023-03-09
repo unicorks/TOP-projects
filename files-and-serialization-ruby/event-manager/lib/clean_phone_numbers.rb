@@ -1,5 +1,4 @@
 require 'csv'
-require 'erb'
 
 def clean_number(number)
   number = number.to_s.delete("^0-9")
