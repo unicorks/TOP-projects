@@ -1,0 +1,1 @@
+# TODO: choose whether continued game or new, load dictionary, choose word, show hint to user, track correct + incorrect letters, serialise when user wants to save game. need hangman or player class
