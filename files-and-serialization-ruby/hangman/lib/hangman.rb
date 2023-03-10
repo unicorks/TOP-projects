@@ -3,10 +3,10 @@ require 'json'
 class Player
   attr_accessor :guessed_letters, :guessed_word, :wrong_guesses_left, :word
 
-  def initialise(gl = {}, word = pick_word, gw = Array.new(@word.length, '_'), wg = 12)
+  def initialize(gl, word, wg)
     @guessed_letters = gl
     @word = word
-    @guessed_word = gw
+    @guessed_word = Array.new(@word.length - 1, '_')
     @wrong_guesses_left = wg
   end
 
@@ -18,7 +18,9 @@ class Player
       break if File.exist?("#{dirname}/#{name}.json")
     end
     data = JSON.parse(File.open("#{dirname}/#{name}.json", 'r', &:read))
-    self.new(data['guessed_letters'], data['guesssed_word'], data['wrong_guesses_left'], data['word'])
+    p = new(data['guessed_letters'], data['word'], data['wrong_guesses_left'])
+    p.guessed_word = data['guessed_word']
+    p
   end
 
   def start_game
@@ -35,34 +37,32 @@ class Player
     puts "You lost. The word was #{word}."
   end
 
-  private
-
-  def pick_word
+  def self.pick_word
     File.open('dictionary.txt', 'r', &:readlines).filter { |e| e.length >= 5 && e.length <= 12 }.sample
   end
+
+  private
 
   def get_letter
     # get letter from user
     while true
       puts "Enter a letter, or 'save' if you wish to save the game and exit"
       letter = gets.chomp
-      break if letter.count("a-zA-Z") == 1
+      break if letter.count('a-zA-Z') == 1
 
-      if letter == 'save'
-        save_game
-      end
+      save_game if letter == 'save'
     end
     letter.downcase
   end
 
   def check_letter(letter)
-    if word.includes?(letter)
+    if word.include?(letter)
       for i in 0..word.length
-        if word[i] == letter
-          gw = guessed_word
-          gw[i] = letter
-          self.guessed_word = gw
-        end
+        next unless word[i] == letter
+
+        gw = guessed_word
+        gw[i] = letter
+        self.guessed_word = gw
       end
       puts 'Correct guess!'
       gl = guessed_letters
@@ -80,9 +80,9 @@ class Player
 
   def print_game_state
     puts "Incorrect guesses left: #{wrong_guesses_left}"
-    puts "Correct letters guessed: #{guessed_letters.select { |_key, value| value == 'c' }}"
-    puts "Incorrect letters guessed: #{guessed_letters.select { |_key, value| value == 'i' }}"
-    puts guessed_word
+    puts "Correct letters guessed: #{guessed_letters.select { |_key, value| value == 'c' }.keys.join(' ')}"
+    puts "Incorrect letters guessed: #{guessed_letters.select { |_key, value| value == 'i' }.keys.join(' ')}"
+    puts guessed_word.join('')
   end
 
   def save_game
@@ -100,11 +100,11 @@ class Player
       end
     end
     json_string = JSON.dump({
-      guessed_letters: guessed_letters,
-      guessed_word: guessed_word,
-      wrong_guesses_left: wrong_guesses_left,
-      word: word
-    })
+                              guessed_letters: guessed_letters,
+                              guessed_word: guessed_word,
+                              wrong_guesses_left: wrong_guesses_left,
+                              word: word
+                            })
     File.open("#{dirname}/#{name}.json", 'w') { |f| f.write(json_string) }
     puts 'Saved. Thankyou for playing!'
     exit
@@ -113,10 +113,10 @@ end
 
 # begin game process
 puts "Welcome to Hangman! Enter 0 if you'd like to begin a new game, or 1 if you'd like to load a saved game."
-choice = choice.to_i
+choice = gets.chomp.to_i
 case choice
 when 0
-  p = Player.new
+  p = Player.new({}, Player.pick_word, 12)
   p.start_game
 when 1
   p = Player.load_game
