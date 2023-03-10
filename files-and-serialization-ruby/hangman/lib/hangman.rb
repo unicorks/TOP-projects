@@ -18,6 +18,7 @@ class Player
       break if File.exist?("#{dirname}/#{name}.json")
     end
     data = JSON.parse(File.open("#{dirname}/#{name}.json", 'r', &:read))
+    File.delete("#{dirname}/#{name}.json")
     p = new(data['guessed_letters'], data['word'], data['wrong_guesses_left'])
     p.guessed_word = data['guessed_word']
     p
