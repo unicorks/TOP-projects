@@ -6,7 +6,7 @@ class Player
   def initialize(gl, word, wg)
     @guessed_letters = gl
     @word = word
-    @guessed_word = Array.new(@word.length - 1, '_')
+    @guessed_word = Array.new(@word.length, '_')
     @wrong_guesses_left = wg
   end
 
@@ -29,7 +29,7 @@ class Player
       letter = get_letter
       check_letter(letter)
 
-      if word == guessed_word
+      if word == guessed_word.join
         puts 'You won! Congrats.'
         exit
       end
@@ -38,7 +38,7 @@ class Player
   end
 
   def self.pick_word
-    File.open('dictionary.txt', 'r', &:readlines).filter { |e| e.length >= 5 && e.length <= 12 }.sample
+    File.open('dictionary.txt', 'r', &:readlines).filter { |e| e.length >= 5 && e.length <= 12 }.sample.delete("\n")
   end
 
   private
