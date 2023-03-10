@@ -1,25 +1,50 @@
-# TODO: game process, load from saved
 require 'json'
 
 class Player
   attr_accessor :guessed_letters, :guessed_word, :wrong_guesses_left, :word
 
-  def initialise
-    @guessed_letters = {}
-    @word = pick_word
-    @guessed_word = Array.new(@word.length, '_')
-    @wrong_guesses_left = 12
+  def initialise(gl = {}, word = pick_word, gw = Array.new(@word.length, '_'), wg = 12)
+    @guessed_letters = gl
+    @word = word
+    @guessed_word = gw
+    @wrong_guesses_left = wg
+  end
+
+  def self.load_game
+    dirname = 'saved'
+    while true
+      puts 'Enter game name: '
+      name = gets.chomp
+      break if File.exist?("#{dirname}/#{name}.json")
+    end
+    data = JSON.parse(File.open("#{dirname}/#{name}.json", 'r', &:read))
+    self.new(data['guessed_letters'], data['guesssed_word'], data['wrong_guesses_left'], data['word'])
+  end
+
+  def start_game
+    while wrong_guesses_left.positive?
+      print_game_state
+      letter = get_letter
+      check_letter(letter)
+
+      if word == guessed_word
+        puts 'You won! Congrats.'
+        exit
+      end
+    end
+    puts "You lost. The word was #{word}."
   end
 
   private
 
   def pick_word
-    File.open('dictionary.txt', 'r', &:readlines).filter{ |e| e.length >= 5 && e.length <= 12 }.sample
+    File.open('dictionary.txt', 'r', &:readlines).filter { |e| e.length >= 5 && e.length <= 12 }.sample
   end
 
   def get_letter
     # get letter from user
     while true
+      puts "Enter a letter, or 'save' if you wish to save the game and exit"
       letter = gets.chomp
       break if letter.count("a-zA-Z") == 1
 
@@ -61,12 +86,13 @@ class Player
   end
 
   def save_game
+    # serialise obj state here and save to dir
     dirname = 'saved'
     Dir.mkdir(dirname) unless Dir.exist?(dirname)
     while true
       puts 'Enter game name: '
       name = gets.chomp
-      if File.exist?("#{dirname}/#{name}")
+      if File.exist?("#{dirname}/#{name}.json")
         puts 'Game already exists.'
         next
       else
@@ -79,9 +105,22 @@ class Player
       wrong_guesses_left: wrong_guesses_left,
       word: word
     })
-    # serialise obj state here and save to dir
-    File.open("#{dirname}/#{name}.txt", 'w') { |f| f.write(json_string) }
-    puts "Saved. Thankyou for playing!"
+    File.open("#{dirname}/#{name}.json", 'w') { |f| f.write(json_string) }
+    puts 'Saved. Thankyou for playing!'
     exit
   end
+end
+
+# begin game process
+puts "Welcome to Hangman! Enter 0 if you'd like to begin a new game, or 1 if you'd like to load a saved game."
+choice = choice.to_i
+case choice
+when 0
+  p = Player.new
+  p.start_game
+when 1
+  p = Player.load_game
+  p.start_game
+else
+  puts "Looks like you don't want to play :("
 end
