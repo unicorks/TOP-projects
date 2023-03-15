@@ -15,3 +15,47 @@ def fibs_rec(n)
 end
 
 p fibs_rec(8)
+
+def sort(n)
+    if n.length < 2
+        return n
+    else
+        left, right = n.each_slice( (n.size/2.0).round ).to_a
+        left = sort(left)
+        right = sort(right)
+
+        # merge here, compare elements of left and right arrays, return merged array
+        i = j = k = 0
+        arr = []
+        while j < left.length && k < right.length
+            if left[j] < right[k]
+                arr[i] = left[j]
+                i += 1
+                j += 1
+            elsif left[j] > right[k]
+                arr[i] = right[k]
+                i += 1
+                k += 1
+            elsif left[j] == right[k]
+                arr[i], arr[i+1] = left[j], right[k]
+                i += 2
+                j += 1
+                k += 1
+            end
+        end
+        # check remaining items
+        while j < left.length
+            arr[i] = left[j]
+            i += 1
+            j += 1
+        end
+        while k < right.length
+            arr[i] = right[k]
+            i += 1
+            k += 1
+        end
+        return arr
+    end
+end
+
+p sort([4, 2, 3, 1, -1, 8, 17, -69])
