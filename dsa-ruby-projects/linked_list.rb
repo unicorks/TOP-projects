@@ -94,9 +94,36 @@ class LinkedList
         end
         str.join(" -> ")
     end
-end
 
-list = LinkedList.new()
-list.append('s')
-list.append('a')
-list.append('n')
+    # extra credit methods
+    def insert_at(value, index)
+        if index == 0
+            self.prepend(value)
+        end
+        # make new node, let prev node point to new, new node point to node at its desired idx
+        old_node = self.at(index)
+        i = 0
+        e = head
+        until i == index - 1 || e == nil
+            i += 1
+            e = e.next_node
+        end
+        e.next_node = Node.new(value, old_node)
+    end
+
+    def remove_at(index)
+        if index == 0
+            self.head = head.next_node
+            return
+        end
+        # get node at idx, make prev node point to next node of removed node
+        delete_node = self.at(index)
+        i = 0
+        e = head
+        until i == index - 1 || e == nil
+            i += 1
+            e = e.next_node
+        end
+        e.next_node = delete_node.next_node
+    end
+end
