@@ -24,8 +24,15 @@ class Tree
         root
     end
 
-    def insert(key, root)
-        if root == nil
+    def min(node)
+        current = node
+        # loop down to find the leftmost leaf
+        current = current.left until current.left.nil?
+        return current
+    end
+
+    def insert(key, root=@root)
+        if root.nil?
             return Node.new(key)
         else
             if key > root.data
@@ -37,6 +44,44 @@ class Tree
         root
     end
 
+    def delete(data, root=@root)
+        if root.nil?
+            return root
+        else
+            if data < root.data
+                root.left = delete(data, root.left)
+            elsif data > root.data
+                root.right = delete(data, root.right)
+            else
+                if root.left.nil? && root.right.nil?
+                    return nil
+                elsif root.right.nil?
+                    return root.left
+                elsif root.left.nil?
+                    return root.right
+                else
+                    # in order successor
+                    temp = min(root.right)
+                    root.data = temp.data
+                    root.right = delete(temp.data, root.right)
+                end
+            end
+        end
+        return root
+    end
+
+    def find(data, root=@root)
+        if root.nil?
+            return "Not found."
+        elsif root.data == data
+            return root
+        elsif data < root.data
+            return find(data, root.left)
+        elsif data > root.data
+            return find(data, root.right)
+        end
+    end
+
     def pretty_print(node = @root, prefix = '', is_left = true)
         pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
         puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -46,5 +91,4 @@ end
 
 # driver code
 e = Tree.new([1, 7, 4, 23, 8])
-e.insert(1234, e.root)
 e.pretty_print
