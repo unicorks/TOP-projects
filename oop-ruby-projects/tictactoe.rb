@@ -70,6 +70,7 @@ class Board
   end
 
   def place_marker(place)
+    place = get_place unless place
     tmp = grid
     tmp[place - 1] = turn.symbol
     self.grid = tmp
@@ -87,7 +88,7 @@ class Board
     i = 0
     while i < 9
       print
-      place_marker(get_place)
+      place_marker
       declare_winner if game_over?
       self.turn = turn == player1 ? player2 : player1
       i += 1
@@ -97,8 +98,8 @@ class Board
 end
 
 # GAME PROCESS:
-puts 'Welcome to Tic-Tac-Toe on the command line'
-player1 = Player.new()
-player2 = Player.new()
-board = Board.new(player1, player2)
-board.start_game
+# puts 'Welcome to Tic-Tac-Toe on the command line'
+# player1 = Player.new()
+# player2 = Player.new()
+# board = Board.new(player1, player2)
+# board.start_game
