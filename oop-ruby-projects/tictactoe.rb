@@ -70,7 +70,7 @@ class Board
   end
 
   def place_marker(place)
-    place = get_place unless place
+    place = place ? place : get_place
     tmp = grid
     tmp[place - 1] = turn.symbol
     self.grid = tmp

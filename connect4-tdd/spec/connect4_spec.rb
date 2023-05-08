@@ -16,12 +16,24 @@ describe Game do
 
     describe '#place_marker' do
         context 'column is empty' do
-            # todo
+            it 'places marker at correct position' do
+            game.place_marker(1)
+            tmp = game.grid
+            expect(tmp[0][0]).to eq('O')
+            end
         end
-        context 'column is partially filled' do 
-            # todo
+
+        context 'column is partially filled' do
+            it 'places marker at the correct position in the next available row' do
+            game.place_marker(1)
+            game.place_marker(1)
+            tmp = game.grid
+            expect(tmp[0][0]).to eq('O')
+            expect(tmp[0][1]).to eq('O')
+            end
         end
     end
+
 
     describe '#check_win' do
         # horizontal, vertical, diagonal and no win
