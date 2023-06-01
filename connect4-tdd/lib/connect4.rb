@@ -58,20 +58,28 @@ class Game
   end
 
   def place_marker(column)
+    # full column case?
     col = column ? column - 1 : get_column
     tmp = grid
     for i in 0..5
       if tmp[col][i] == '○'
         tmp[col][i] = turn.symbol
+        self.grid = tmp
         check_win(col, i, turn.symbol)
         break
       end
     end
-    self.grid = tmp
   end
 
   def check_win(col, row, symbol)
     # to do
+    tmp = grid
+    # vertical check
+    if (grid[col].count(symbol) == 4) ||
+      (tmp.collect_concat { |col| col[row] }.count(symbol) >= 4)
+      puts "#{turn.name} won. Congrats!"
+      exit
+    end
   end
 
   def switch_turn
