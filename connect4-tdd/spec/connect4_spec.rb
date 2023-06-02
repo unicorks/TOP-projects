@@ -36,7 +36,7 @@ describe Game do
 
 
     describe '#check_win' do
-        let(:win_phrase) { String.new("#{player_1.name} won. Congrats!") }
+        let(:win_phrase) { String.new("#{player_1.name} won. Congrats!\n") }
         # no win, horizontal, vertical, diagonal
         it 'it does not print win phrase on simply placing marker' do
             expect { game.place_marker(3) }.not_to output(win_phrase).to_stdout
@@ -59,7 +59,7 @@ describe Game do
         it 'works diagonally' do
             game.switch_turn
             4.downto(2) do |n|
-                n.times { game.place_marker(n)}
+                n-1.times { game.place_marker(n)}
             end
             game.switch_turn
             4.downto(2) do |n|

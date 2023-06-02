@@ -76,15 +76,70 @@ class Game
     tmp = grid
     # vertical check
     if (grid[col].count(symbol) == 4) ||
-      (tmp.collect_concat { |col| col[row] }.count(symbol) >= 4)
+      (tmp.collect_concat { |col| col[row] }.count(symbol) >= 4) ||
+      diagonal_check(col, row, symbol) == true
       puts "#{turn.name} won. Congrats!"
-      exit
+      return true
     end
   end
 
   def switch_turn
     self.turn = turn == player1 ? player2 : player1
   end
+
+  def diagonal_check(col, row, symbol)
+    # diagonal
+    tmp = grid
+    diagonal = [tmp[col][row]]
+    c = col - 1
+    r = row - 1
+    unless col == 0 || row == 0
+      until c == 0 || r == 0 do 
+        diagonal.prepend(tmp[c][r])
+        c -= 1
+        r -= 1
+      end
+    end
+    c = col + 1
+    r = row + 1
+    unless col == 6 || row == 5
+      until c == 6 || r == 5 do
+        diagonal.append(tmp[c][r])
+        c += 1 
+        r += 1
+      end
+    end
+    if diagonal.count(symbol) >= 4
+      return true
+    end
+  
+    # antidiagonal
+    anti = [tmp[col][row]]
+    c = col + 1
+    r = row - 1
+    unless col == 6 || row == 0
+      until c == 6 || r == 0 do 
+        anti.prepend(tmp[c][r])
+        c += 1
+        r -= 1
+      end
+    end
+    c = col - 1
+    r = row + 1
+    unless col == 0 || row == 5
+      until c == 0 || r == 5 do
+        anti.append(tmp[c][r])
+        c -= 1
+        r += 1
+      end
+    end
+    if anti.count(symbol) >= 4
+      return true
+    end
+  
+    return false
+  end
+  
 end
 
 p1 = Player.new('sa', 'X')
