@@ -51,9 +51,7 @@ describe Game do
         end
 
         it 'works vertically- prints win phrase if 4 in a column of same player' do
-            game.place_marker(1)
-            game.place_marker(1)
-            game.place_marker(1)
+            3.times { game.place_marker(1) }
             expect { game.place_marker(1) }.to output(win_phrase).to_stdout
         end
 
