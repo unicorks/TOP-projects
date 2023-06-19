@@ -32,12 +32,20 @@ class Game
       @turn = @player1
   end
 
+  def start
+    while true
+      print_grid
+      place_marker(get_column)
+      switch_turn
+    end
+  end
+
   def get_column
     while true
       puts "Where would you like to drop your marker, #{turn.name}?"
       column = gets.chomp.to_i
       tmp = grid
-      break if column.positive? && column <= 7 && tmp[column][-1] == '○'
+      break if column.positive? && column <= 7 && tmp[column-1][-1] == '○'
     end
     column
   end
@@ -55,10 +63,10 @@ class Game
       print k
       print ' '
     end
+    print "\n"
   end
 
   def place_marker(column)
-    # full column case?
     col = column ? column - 1 : get_column
     tmp = grid
     for i in 0..5
@@ -92,21 +100,21 @@ class Game
     tmp = grid
     diagonal = [tmp[col][row]]
     c = col - 1
-    r = row - 1
-    unless col == 0 || row == 0
-      until c == 0 || r == 0 do 
+    r = row + 1
+    unless col == 0 || row == 5
+      until c < 0 || r > 5 do 
         diagonal.prepend(tmp[c][r])
         c -= 1
-        r -= 1
+        r += 1
       end
     end
     c = col + 1
-    r = row + 1
-    unless col == 6 || row == 5
-      until c == 6 || r == 5 do
+    r = row - 1
+    unless col == 6 || row == 0
+      until c > 6 || r < 0 do
         diagonal.append(tmp[c][r])
         c += 1 
-        r += 1
+        r -= 1
       end
     end
     if diagonal.count(symbol) >= 4
@@ -116,21 +124,21 @@ class Game
     # antidiagonal
     anti = [tmp[col][row]]
     c = col + 1
-    r = row - 1
-    unless col == 6 || row == 0
-      until c == 6 || r == 0 do 
+    r = row + 1
+    unless col == 6 || row == 5
+      until c > 6 || r > 5 do 
         anti.prepend(tmp[c][r])
         c += 1
-        r -= 1
+        r += 1
       end
     end
     c = col - 1
-    r = row + 1
-    unless col == 0 || row == 5
-      until c == 0 || r == 5 do
+    r = row - 1
+    unless col == 0 || row == 0
+      until c < 0 || r < 0 do
         anti.append(tmp[c][r])
         c -= 1
-        r += 1
+        r -= 1
       end
     end
     if anti.count(symbol) >= 4
@@ -142,7 +150,6 @@ class Game
   
 end
 
-p1 = Player.new('sa', 'X')
-p2 = Player.new('da', 'O')
-game = Game.new(p1, p2)
-game.place_marker(1)
+
+game = Game.new(Player.new(), Player.new())
+game.start
