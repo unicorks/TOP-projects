@@ -37,6 +37,10 @@ class Game
       print_grid
       place_marker(get_column)
       switch_turn
+      if self.grid.flatten.none?('○') 
+        puts "It was a draw. Sad."
+        exit
+      end
     end
   end
 
@@ -73,17 +77,17 @@ class Game
       if tmp[col][i] == '○'
         tmp[col][i] = turn.symbol
         self.grid = tmp
-        check_win(col, i, turn.symbol)
+        exit if check_win(col, i, turn.symbol)
         break
       end
     end
   end
 
   def check_win(col, row, symbol)
-    # to do
     tmp = grid
     # vertical check
     if (grid[col].count(symbol) == 4) ||
+      # horizontal check
       (tmp.collect_concat { |col| col[row] }.count(symbol) >= 4) ||
       diagonal_check(col, row, symbol) == true
       puts "#{turn.name} won. Congrats!"
