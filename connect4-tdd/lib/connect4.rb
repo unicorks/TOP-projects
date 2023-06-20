@@ -91,6 +91,7 @@ class Game
       (tmp.collect_concat { |col| col[row] }.count(symbol) >= 4) ||
       diagonal_check(col, row, symbol) == true
       puts "#{turn.name} won. Congrats!"
+      board.print
       return true
     end
   end
