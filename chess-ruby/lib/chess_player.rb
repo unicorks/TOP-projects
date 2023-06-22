@@ -14,8 +14,8 @@ def Player
     def get_color
         while true
           puts "Enter your color, white or black: "
-          color = gets.chomp
-          break if downcase(color) == 'white'|| downcase(color) == 'black'
+          color = gets.chomp.downcase
+          break if color == 'white'|| color == 'black'
         end
         color
     end

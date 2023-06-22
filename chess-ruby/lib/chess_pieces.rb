@@ -1,8 +1,11 @@
 class Pawn
-    def initialise(color)
+    attr_accessor :color, :valid_moves, :symbol
+
+    def initialize(color)
         @color =  color
         @valid_moves = valid_moves
         @move_history = []
+        @symbol = color == 'white' ? " ♙ " : " ♟︎ "
     end
 
     def valid_moves
@@ -11,10 +14,13 @@ class Pawn
 end
 
 class Knight
-    def initialise(color)
+    attr_accessor :color, :valid_moves, :symbol
+
+    def initialize(color)
         @color =  color
         @valid_moves = valid_moves
         @move_history = []
+        @symbol = color == 'white' ? " ♘ " : " ♞ "
     end
 
     def valid_moves
@@ -23,10 +29,13 @@ class Knight
 end
 
 class Bishop
-    def initialise(color)
+    attr_accessor :color, :valid_moves, :symbol
+
+    def initialize(color)
         @color =  color
         @valid_moves = valid_moves
         @move_history = []
+        @symbol = color == 'white' ? " ♗ " : " ♝ "
     end
 
     def valid_moves
@@ -35,10 +44,13 @@ class Bishop
 end
 
 class Rook
-    def initialise(color)
+    attr_accessor :color, :valid_moves, :symbol
+
+    def initialize(color)
         @color =  color
         @valid_moves = valid_moves
         @move_history = []
+        @symbol = color == 'white' ? " ♖ " : " ♜ "
     end
 
     def valid_moves
@@ -47,10 +59,13 @@ class Rook
 end
 
 class Queen
-    def initialise(color)
+    attr_accessor :color, :valid_moves, :symbol
+
+    def initialize(color)
         @color =  color
         @valid_moves = valid_moves
         @move_history = []
+        @symbol = color == 'white' ? " ♕ " : " ♛ "
     end
 
     def valid_moves
@@ -59,13 +74,24 @@ class Queen
 end
 
 class King
-    def initialise(color)
+    attr_accessor :color, :valid_moves, :symbol
+
+    def initialize(color)
         @color =  color
         @valid_moves = valid_moves
         @move_history = []
+        @symbol = color == 'white' ? " ♔ " : " ♚ "
     end
 
     def valid_moves
         # todo
+    end
+end
+
+class EmptyPlace
+    attr_accessor :symbol
+    
+    def initialize()
+        @symbol =  "   "
     end
 end
