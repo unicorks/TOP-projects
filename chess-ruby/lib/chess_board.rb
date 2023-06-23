@@ -7,25 +7,25 @@ class Board
     def initialize
         @board = Array.new(8) { Array.new(8, EmptyPlace.new)}
         for i in 0..7
-            @board[1][i] = Pawn.new('white')
-            @board[6][i] = Pawn.new('black')
+            @board[1][i] = Pawn.new('white', self, [1, i])
+            @board[6][i] = Pawn.new('black', self, [6, 1])
         end
         for i in [0, 7]
-            @board[0][i] = Rook.new('white')
-            @board[7][i] = Rook.new('black')
+            @board[0][i] = Rook.new('white', self, [0, i])
+            @board[7][i] = Rook.new('black', self, [7, i])
         end
         for i in [1, 6]
-            @board[0][i] = Knight.new('white')
-            @board[7][i] = Knight.new('black')
+            @board[0][i] = Knight.new('white', self, [0, i])
+            @board[7][i] = Knight.new('black', self, [7, i])
         end
         for i in [2, 5]
-            @board[0][i] = Bishop.new('white')
-            @board[7][i] = Bishop.new('black')
+            @board[0][i] = Bishop.new('white', self, [0, i])
+            @board[7][i] = Bishop.new('black', self, [7, i])
         end
-        @board[0][3] = Queen.new('white')
-        @board[0][4] = King.new('white')
-        @board[7][3] = Queen.new('black')
-        @board[7][4] = King.new('black')
+        @board[0][3] = Queen.new('white', self, [0, 3])
+        @board[0][4] = King.new('white', self, [0, 4])
+        @board[7][3] = Queen.new('black', self, [7, 3])
+        @board[7][4] = King.new('black', self, [7, 4])
     end
 
     def algebraic_to_coords(algebra)
@@ -48,6 +48,3 @@ class Board
         end
     end
 end
-
-board = Board.new()
-board.print_board
