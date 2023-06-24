@@ -18,20 +18,21 @@ describe Board do
     end
 end
 
-describe Knight do
-    subject(:knight) { described_class.new('white') }
+context 'test em pieces' do
+    let(:board_) { Board.new }
+    let(:board) { board_.board }
 
-    describe '#valid_moves' do
-        it 'gives all valid 8 moves' do
-            # todo
-        end
+    describe Knight do
+        subject(:knight) { board[0][1] }
 
-        it 'gives appropriate number of moves when some moves go out of board' do
-            # todo
-        end
+        describe '#valid_moves' do
+            it 'gives all valid 8 moves' do
+                expect(knight.valid_moves([4, 3])).to eq([[6, 2], [6, 4], [2, 4], [2, 2], [5, 5], [5, 1], [3, 5], [3, 1]])
+            end
 
-        it 'does not quash pieces of the same color' do
-            # todo
+            it 'does not quash pieces of the same color' do
+                expect(knight.valid_moves).to eq([[2, 0], [2, 2]])
+            end
         end
     end
 end
