@@ -1,15 +1,28 @@
 class Pawn
-    attr_accessor :color, :symbol, :board, :move_history
+    attr_accessor :color, :symbol, :board, :move_history, :direction
 
     def initialize(color, board, initial_pos)
         @color =  color
         @move_history = [initial_pos]
         @board = board
         @symbol = color == 'white' ? " ♙ " : " ♟︎ "
+        @direction = color == 'white' ? 1 : -1
     end
 
-    def valid_moves
-        # todo
+    def valid_moves(current_pos=nil)
+        b = board.board
+        tmp = move_history
+        current_pos = tmp[-1] if current_pos == nil
+        x1, y1 = current_pos[0], current_pos[1]
+        valid_moves = []
+        x = x1 + direction
+        x2 = x1 + (2*direction)
+        valid_moves << [x, y1] unless (x < 0 || y1 < 0 || x >= 8 || y1 >= 8 || (b[x][y1].color != 'e'))
+        valid_moves << [x2, y1] unless (move_history.length != 1 || x2 < 0 || y1 < 0 || x2 >= 8 || y1 >= 8 || (b[x2][y1].color != 'e'))
+        for i in [y1-1, y1+1]
+            valid_moves << [x, i] unless (x < 0 || i < 0 || x >= 8 || i >= 8 || (b[x][i].color == self.color) || (b[x][i].color == 'e'))
+        end
+        valid_moves
     end
 end
 
@@ -52,7 +65,7 @@ class Bishop
         @symbol = color == 'white' ? " ♗ " : " ♝ "
     end
 
-    def valid_moves
+    def valid_moves(current_pos)
         # todo
     end
 end
@@ -67,7 +80,7 @@ class Rook
         @symbol = color == 'white' ? " ♖ " : " ♜ "
     end
 
-    def valid_moves
+    def valid_moves(current_pos)
         # todo
     end
 end
@@ -82,7 +95,7 @@ class Queen
         @symbol = color == 'white' ? " ♕ " : " ♛ "
     end
 
-    def valid_moves
+    def valid_moves(current_pos)
         # todo
     end
 end
@@ -97,7 +110,7 @@ class King
         @symbol = color == 'white' ? " ♔ " : " ♚ "
     end
 
-    def valid_moves
+    def valid_moves(current_pos)
         # todo
     end
 end

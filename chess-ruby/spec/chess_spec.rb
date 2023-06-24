@@ -35,4 +35,28 @@ context 'test em pieces' do
             end
         end
     end
+
+    describe Pawn do
+        context 'when pawn is white' do
+            subject(:white_pawn) { board[1][0] }
+            it 'gives appropriate valid moves in the right direction' do
+                # todo
+            end
+
+            it 'shows sidewards capture move when valid' do
+                # todo
+            end
+        end
+
+        context 'when pawn is black' do
+            subject(:black_pawn) { board[6][7] }
+            it 'gives appropriate valid moves in the right direction' do
+                # todo
+            end
+
+            it 'shows sidewards capture move when valid' do
+                # todo
+            end
+        end
+    end
 end
