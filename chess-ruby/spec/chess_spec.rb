@@ -40,22 +40,22 @@ context 'test em pieces' do
         context 'when pawn is white' do
             subject(:white_pawn) { board[1][0] }
             it 'gives appropriate valid moves in the right direction' do
-                # todo
+                expect(white_pawn.valid_moves()).to eq [[2, 0], [3, 0]]
             end
 
             it 'shows sidewards capture move when valid' do
-                # todo
+                expect(white_pawn.valid_moves([5, 0])).to eq [[6, 1]]
             end
         end
 
         context 'when pawn is black' do
             subject(:black_pawn) { board[6][7] }
             it 'gives appropriate valid moves in the right direction' do
-                # todo
+                expect(black_pawn.valid_moves).to eq [[5, 1], [4, 1]]
             end
 
             it 'shows sidewards capture move when valid' do
-                # todo
+                expect(black_pawn.valid_moves([2, 7])).to eq [[1, 6]]
             end
         end
     end
