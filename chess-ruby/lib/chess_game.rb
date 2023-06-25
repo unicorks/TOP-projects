@@ -3,5 +3,5 @@ require_relative 'chess_player'
 
 board = Board.new
 tmp = board.board
-# bishop = tmp[0][2]
-# print bishop.valid_moves([2, 3])
+rook = tmp[7][0]
+print rook.valid_moves([3, 3])

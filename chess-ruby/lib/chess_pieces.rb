@@ -121,8 +121,47 @@ class Rook
         @symbol = color == 'white' ? " ♖ " : " ♜ "
     end
 
-    def valid_moves(current_pos)
-        # todo
+    def valid_moves(current_pos=nil)
+        b = board.board
+        tmp = move_history
+        current_pos = tmp[-1] if current_pos == nil
+        x, y = current_pos[0], current_pos[1]
+        valid_moves = []
+        # vertical
+        x1 = current_pos[0] + 1
+        unless x == 7
+            until x1 > 7 || b[x1][y].color == self.color
+                valid_moves.append([x1, y])
+                break if b[x1][y].color != 'e'
+                x1 += 1
+            end
+        end
+        x1 = current_pos[0] - 1
+        unless x == 0
+            until x1 < 0 || b[x1][y].color == self.color
+                valid_moves.append([x1, y])
+                break if b[x1][y].color != 'e'
+                x1 -= 1
+            end
+        end
+        # horizontal
+        y1 = current_pos[1] - 1
+        unless y == 0
+            until y1 < 0 || b[x][y1].color == self.color
+                valid_moves.append([x, y1])
+                break if b[x][y1].color != 'e'
+                y1 -= 1
+            end
+        end
+        y1 = current_pos[1] + 1
+        unless y == 7
+            until y1 > 7 || b[x][y1].color == self.color
+                valid_moves.append([x, y1])
+                break if b[x][y1].color != 'e'
+                y1 += 1
+            end
+        end
+        valid_moves
     end
 end
 

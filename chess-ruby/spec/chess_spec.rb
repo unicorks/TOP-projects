@@ -62,12 +62,23 @@ context 'test em pieces' do
 
     describe Bishop do
         subject(:bishop) { board[0][2] }
-        it 'has no valid moves during initial position' do
+        it 'has no valid moves at initial position' do
             expect(bishop.valid_moves).to eq []
         end
 
         it 'can move appropriately' do
             expect(bishop.valid_moves([2, 3])).to eq [[3, 4], [4, 5], [5, 6], [6, 7], [3, 2], [4, 1], [5, 0]]
+        end
+    end
+
+    describe Rook do
+        subject(:rook) { board[7][0] }
+        it 'has no valid moves at initial position' do
+            expect(rook.valid_moves).to eq []
+        end
+
+        it 'can move appropriately' do
+            expect(rook.valid_moves([3, 3])).to eq [[4, 3], [5, 3], [2, 3], [1, 3], [3, 2], [3, 1], [3, 0], [3, 4], [3, 5], [3, 6], [3, 7]]
         end
     end
 end
