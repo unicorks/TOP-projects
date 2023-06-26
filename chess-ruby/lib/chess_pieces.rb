@@ -9,7 +9,7 @@ class Pawn
         @direction = color == 'white' ? 1 : -1
     end
 
-    def valid_moves(current_pos=nil)
+    def valid_moves(current_pos=nil, only_capturable_squares=false)
         b = board.board
         tmp = move_history
         current_pos = tmp[-1] if current_pos == nil
@@ -19,9 +19,12 @@ class Pawn
         x2 = x1 + (2*direction)
         valid_moves << [x, y1] unless (x < 0 || y1 < 0 || x >= 8 || y1 >= 8 || (b[x][y1].color != 'e'))
         valid_moves << [x2, y1] unless (move_history.length != 1 || x2 < 0 || y1 < 0 || x2 >= 8 || y1 >= 8 || (b[x2][y1].color != 'e'))
+        capturable_squares = []
         for i in [y1-1, y1+1]
             valid_moves << [x, i] unless (x < 0 || i < 0 || x >= 8 || i >= 8 || (b[x][i].color == self.color) || (b[x][i].color == 'e'))
+            capturable_squares << [x, i] unless (x < 0 || i < 0 || x >= 8 || i >= 8 || (b[x][i].color == self.color))
         end
+        return capturable_squares if only_capturable_squares
         valid_moves
     end
 end
@@ -205,36 +208,36 @@ class King
         col = [-1, 0, 1, 1, 1, 0, -1, -1]
         x, y = current_pos[0], current_pos[1]
         valid_moves = []
+        moves_of_oppn = valid_moves_of_oppn
         for i in 0...row.length
             x1 = x + row[i]
             y1 = y + col[i]
-            # add in_check? function in condition after fixing
-            valid_moves << [x1, y1] unless (x1 < 0 || y1 < 0 || x1 >= 8 || y1 >= 8 || (b[x1][y1].color == self.color) )
+            valid_moves << [x1, y1] unless (x1 < 0 || y1 < 0 || x1 >= 8 || y1 >= 8 || (b[x1][y1].color == self.color) || moves_of_oppn.include?([x1, y1]))
         end
         valid_moves
     end
 
-    def in_check?(desired_pos)
+    def valid_moves_of_oppn
         # this is a buggy function, gotta fix
         b = board.board
-        og_board = board.board
-        b[desired_pos[0]][desired_pos[1]] = self
-        board.board = b
+        moves = []
         for i in 0..7
             for j in 0..7
                 unless b[i][j].color == 'e' || b[i][j].color == self.color
-                    e = b[i][j].valid_moves
-                    for move in e
-                        if move == desired_pos
-                            board.board = og_board
-                            return true
-                        end
+                    if b[i][j].is_a?(Pawn) 
+                        e = b[i][j].valid_moves(nil, true)
+                    # this part also gotta be fixed
+                    elsif b[i][j].is_a?(King) 
+                        next
+                    else
+                        e = b[i][j].valid_moves
                     end
+                    moves << e
                 end
             end
         end
-        board.board = og_board
-        false
+        print moves.flatten(1)
+        moves.flatten(1)
     end
 end
 
