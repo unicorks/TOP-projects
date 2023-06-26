@@ -197,8 +197,44 @@ class King
         @symbol = color == 'white' ? " ♔ " : " ♚ "
     end
 
-    def valid_moves(current_pos)
-        # todo
+    def valid_moves(current_pos=nil)
+        b = board.board
+        tmp = move_history
+        current_pos = tmp[-1] if current_pos == nil
+        row = [1, 1, 1, 0, -1, -1, -1, 0]
+        col = [-1, 0, 1, 1, 1, 0, -1, -1]
+        x, y = current_pos[0], current_pos[1]
+        valid_moves = []
+        for i in 0...row.length
+            x1 = x + row[i]
+            y1 = y + col[i]
+            # add in_check? function in condition after fixing
+            valid_moves << [x1, y1] unless (x1 < 0 || y1 < 0 || x1 >= 8 || y1 >= 8 || (b[x1][y1].color == self.color) )
+        end
+        valid_moves
+    end
+
+    def in_check?(desired_pos)
+        # this is a buggy function, gotta fix
+        b = board.board
+        og_board = board.board
+        b[desired_pos[0]][desired_pos[1]] = self
+        board.board = b
+        for i in 0..7
+            for j in 0..7
+                unless b[i][j].color == 'e' || b[i][j].color == self.color
+                    e = b[i][j].valid_moves
+                    for move in e
+                        if move == desired_pos
+                            board.board = og_board
+                            return true
+                        end
+                    end
+                end
+            end
+        end
+        board.board = og_board
+        false
     end
 end
 
