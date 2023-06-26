@@ -175,8 +175,15 @@ class Queen
         @symbol = color == 'white' ? " ♕ " : " ♛ "
     end
 
-    def valid_moves(current_pos)
-        # todo
+    def valid_moves(current_pos=nil)
+        tmp = move_history
+        current_pos = tmp[-1] if current_pos == nil
+        valid_moves = []
+        imaginary_rook = Rook.new(self.color, self.board, nil)
+        valid_moves << imaginary_rook.valid_moves(current_pos)
+        imaginary_bishop = Bishop.new(self.color, self.board, nil)
+        valid_moves << imaginary_bishop.valid_moves(current_pos)
+        valid_moves.flatten(1)
     end
 end
 

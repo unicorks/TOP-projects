@@ -81,4 +81,15 @@ context 'test em pieces' do
             expect(rook.valid_moves([3, 3])).to eq [[4, 3], [5, 3], [2, 3], [1, 3], [3, 2], [3, 1], [3, 0], [3, 4], [3, 5], [3, 6], [3, 7]]
         end
     end
+
+    describe Queen do
+        subject(:queen) { board[0][3] }
+        it 'has no valid moves at initial pos' do
+            expect(queen.valid_moves).to eq []
+        end
+
+        it 'shows appropriate no of moves elsewhere' do
+            expect(queen.valid_moves([3, 3])).to eq [[4, 3], [5, 3], [6, 3], [2, 3], [3, 2], [3, 1], [3, 0], [3, 4], [3, 5], [3, 6], [3, 7], [4, 4], [5, 5], [6, 6], [2, 2], [4, 2], [5, 1], [6, 0], [2, 4]]
+        end
+    end
 end
