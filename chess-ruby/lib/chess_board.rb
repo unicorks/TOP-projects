@@ -8,7 +8,7 @@ class Board
         @board = Array.new(8) { Array.new(8, EmptyPlace.new)}
         for i in 0..7
             @board[1][i] = Pawn.new('white', self, [1, i])
-            @board[6][i] = Pawn.new('black', self, [6, 1])
+            @board[6][i] = Pawn.new('black', self, [6, i])
         end
         for i in [0, 7]
             @board[0][i] = Rook.new('white', self, [0, i])

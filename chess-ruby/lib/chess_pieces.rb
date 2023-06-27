@@ -200,7 +200,7 @@ class King
         @symbol = color == 'white' ? " ♔ " : " ♚ "
     end
 
-    def valid_moves(current_pos=nil)
+    def valid_moves(current_pos=nil, only_capturable_squares=false)
         b = board.board
         tmp = move_history
         current_pos = tmp[-1] if current_pos == nil
@@ -208,27 +208,26 @@ class King
         col = [-1, 0, 1, 1, 1, 0, -1, -1]
         x, y = current_pos[0], current_pos[1]
         valid_moves = []
+        capturable_squares = []
         moves_of_oppn = valid_moves_of_oppn
         for i in 0...row.length
             x1 = x + row[i]
             y1 = y + col[i]
             valid_moves << [x1, y1] unless (x1 < 0 || y1 < 0 || x1 >= 8 || y1 >= 8 || (b[x1][y1].color == self.color) || moves_of_oppn.include?([x1, y1]))
+            capturable_squares << [x1, y1] unless (x1 < 0 || y1 < 0 || x1 >= 8 || y1 >= 8 || (b[x1][y1].color == self.color))
         end
+        return capturable_squares if only_capturable_squares
         valid_moves
     end
 
     def valid_moves_of_oppn
-        # this is a buggy function, gotta fix
         b = board.board
         moves = []
         for i in 0..7
             for j in 0..7
                 unless b[i][j].color == 'e' || b[i][j].color == self.color
-                    if b[i][j].is_a?(Pawn) 
+                    if b[i][j].is_a?(Pawn) || b[i][j].is_a? King
                         e = b[i][j].valid_moves(nil, true)
-                    # this part also gotta be fixed
-                    elsif b[i][j].is_a?(King) 
-                        next
                     else
                         e = b[i][j].valid_moves
                     end
@@ -236,7 +235,6 @@ class King
                 end
             end
         end
-        print moves.flatten(1)
         moves.flatten(1)
     end
 end
