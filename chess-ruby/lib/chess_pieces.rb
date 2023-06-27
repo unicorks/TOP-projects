@@ -209,7 +209,7 @@ class King
         x, y = current_pos[0], current_pos[1]
         valid_moves = []
         capturable_squares = []
-        moves_of_oppn = valid_moves_of_oppn
+        moves_of_oppn = valid_moves_of_oppn unless only_capturable_squares
         for i in 0...row.length
             x1 = x + row[i]
             y1 = y + col[i]
@@ -226,7 +226,7 @@ class King
         for i in 0..7
             for j in 0..7
                 unless b[i][j].color == 'e' || b[i][j].color == self.color
-                    if b[i][j].is_a?(Pawn) || b[i][j].is_a? King
+                    if b[i][j].is_a?(Pawn) || b[i][j].is_a?(King)
                         e = b[i][j].valid_moves(nil, true)
                     else
                         e = b[i][j].valid_moves

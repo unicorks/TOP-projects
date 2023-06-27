@@ -51,7 +51,7 @@ context 'test em pieces' do
         context 'when pawn is black' do
             subject(:black_pawn) { board[6][7] }
             it 'gives appropriate valid moves in the right direction' do
-                expect(black_pawn.valid_moves).to eq [[5, 1], [4, 1]]
+                expect(black_pawn.valid_moves).to eq [[5, 7], [4, 7]]
             end
 
             it 'shows sidewards capture move when valid' do
@@ -90,6 +90,17 @@ context 'test em pieces' do
 
         it 'shows appropriate no of moves elsewhere' do
             expect(queen.valid_moves([3, 3])).to eq [[4, 3], [5, 3], [6, 3], [2, 3], [3, 2], [3, 1], [3, 0], [3, 4], [3, 5], [3, 6], [3, 7], [4, 4], [5, 5], [6, 6], [2, 2], [4, 2], [5, 1], [6, 0], [2, 4]]
+        end
+    end
+
+    describe King do
+        subject(:king) { board[0][4] }
+        it 'has no valid moves at initial pos' do
+            expect(king.valid_moves).to eq []
+        end
+
+        it 'shows appropriate no of moves elsewhere' do
+            expect(king.valid_moves([4, 3])).to eq [[4, 4], [3, 4], [3, 3], [3, 2], [4, 2]]
         end
     end
 end
