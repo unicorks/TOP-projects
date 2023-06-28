@@ -1,7 +1,5 @@
-require_relative 'chess_pieces'
-
 def Player
-    def initialise(name=get_name, color=get_color)
+    def initialize(name=get_name, color=get_color)
         @name = name
         @color = color
     end
