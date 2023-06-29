@@ -104,3 +104,29 @@ context 'test em pieces' do
         end
     end
 end
+
+
+describe Game do
+    let(:player_1) { double(Player, name: "Saa", color: "white") }
+    let(:player_2) { double(Player, name: "Da", color: "black") }
+    subject(:game) {described_class.new(player_1, player_2)}
+
+    describe '#move_placed' do
+        it 'returns false if someone tries to access a piece/square that is not their own' do
+            expect(game.move_placed('e5b2')).to be false
+            expect(game.move_placed('h8b2')).to be false
+        end
+
+        it 'returns false if someone is attempting an invalid move' do
+            # todo
+        end
+
+        it 'returns false if desired move puts king in danger' do
+            # todo
+        end
+
+        it 'places the move if it is valid and returns true' do
+            # todo
+        end
+    end
+end

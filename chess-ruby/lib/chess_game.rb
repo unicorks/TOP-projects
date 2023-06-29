@@ -4,9 +4,9 @@ require_relative 'chess_player'
 class Game
     attr_accessor :player_1, :player_2, :board, :turn
 
-    def initialize
-        @player_1 = Player.new()
-        @player_2 = Player.new()
+    def initialize(player_1=Player.new, player_2=Player.new)
+        @player_1 = player_1
+        @player_2 = player_2
         @board = Board.new()
         @turn = player_1
     end
@@ -40,6 +40,3 @@ class Game
         self.turn = turn == player_1 ? player_2 : player_1
     end
 end
-
-game = Game.new()
-print game.move_placed('a1b1')
