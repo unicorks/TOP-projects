@@ -21,8 +21,10 @@ class Pawn
         valid_moves << [x2, y1] unless (move_history.length != 1 || x2 < 0 || y1 < 0 || x2 >= 8 || y1 >= 8 || (b[x2][y1].color != 'e'))
         capturable_squares = []
         for i in [y1-1, y1+1]
-            valid_moves << [x, i] unless (x < 0 || i < 0 || x >= 8 || i >= 8 || (b[x][i].color == self.color) || (b[x][i].color == 'e'))
-            capturable_squares << [x, i] unless (x < 0 || i < 0 || x >= 8 || i >= 8 || (b[x][i].color == self.color))
+            unless only_capturable_squares
+                valid_moves << [x, i] unless (x < 0 || i < 0 || x >= 8 || i >= 8 || (b[x][i].color == self.color) || (b[x][i].color == 'e'))
+            end
+                capturable_squares << [x, i] unless (x < 0 || i < 0 || x >= 8 || i >= 8 || (b[x][i].color == self.color))
         end
         return capturable_squares if only_capturable_squares
         valid_moves
@@ -213,8 +215,10 @@ class King
         for i in 0...row.length
             x1 = x + row[i]
             y1 = y + col[i]
-            valid_moves << [x1, y1] unless (x1 < 0 || y1 < 0 || x1 >= 8 || y1 >= 8 || (b[x1][y1].color == self.color) || moves_of_oppn.include?([x1, y1]))
-            capturable_squares << [x1, y1] unless (x1 < 0 || y1 < 0 || x1 >= 8 || y1 >= 8 || (b[x1][y1].color == self.color))
+            unless only_capturable_squares
+                valid_moves << [x1, y1] unless (x1 < 0 || y1 < 0 || x1 >= 8 || y1 >= 8 || (b[x1][y1].color == self.color) || moves_of_oppn.include?([x1, y1]))
+            end
+                capturable_squares << [x1, y1] unless (x1 < 0 || y1 < 0 || x1 >= 8 || y1 >= 8 || (b[x1][y1].color == self.color))
         end
         return capturable_squares if only_capturable_squares
         valid_moves

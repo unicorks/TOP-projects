@@ -1,6 +1,10 @@
 require_relative 'chess_board'
 require_relative 'chess_player'
 
+# MAJOR BUGS/TODO : mechanism for declaring checkmate
+# sorta crazy idea: try out every single valid move of self's team using place_it
+# if none returns true, it is checkmate/stalemate based on whether or not king is in check at cp
+
 class Game
     attr_accessor :player_1, :player_2, :board, :turn
 
@@ -13,9 +17,10 @@ class Game
 
     def get_move
         while true
+            board.print_board
             puts "Enter your move, #{turn.name} {#{turn.color.upcase}}"
             move = gets.chomp
-            # check if move is valid, todo
+            # check if move is valid
             switch_turn if move_placed(move)
         end
     end
@@ -30,9 +35,11 @@ class Game
 
         x1, y1 = board.algebraic_to_coords(move[2, 2])
         return false unless b[x][y].valid_moves.include?([x1, y1])
-        # todo, make alternate version of board. if king ends up in check, revert board to og self
-        # otherwise let it be
-        place_it([x, y], [x1, y1]) ? true : false
+        unless place_it([x, y], [x1, y1])
+            puts "Uh oh, your king is in check. Attempt another move."
+            return false
+        end
+        true
     end
 
     def switch_turn
@@ -54,10 +61,11 @@ class Game
     def place_it(current_pos, desired_pos)
         x, y = current_pos[0], current_pos[1]
         x1, y1 = desired_pos[0], desired_pos[1]
-        og_board = board.board
         b = board.board
+        piece_at_desired_pos = b[x1][y1]
         b[x1][y1] = b[x][y]
         b[x][y] = EmptyPlace.new
+        board.board = b
         king = 'hi'
         for i in 0..7
             for j in 0..7
@@ -72,9 +80,14 @@ class Game
         mh = king.move_history
         current_pos_of_king = mh[-1]
         if oppn_moves.include?(current_pos_of_king)
-            board.board = og_board 
+            b[x][y] = b[x1][y1]
+            b[x1][y1] = piece_at_desired_pos
             return false
         end
+        b[x1][y1].move_history.append([x1, y1])
         true
     end
 end
+
+# game = Game.new(Player.new('sa', 'white'), Player.new('da', 'black'))
+# game.get_move
