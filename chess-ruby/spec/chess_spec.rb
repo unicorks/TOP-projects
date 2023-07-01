@@ -118,7 +118,8 @@ describe Game do
         end
 
         it 'returns false if someone is attempting an invalid move' do
-            # todo
+            expect(game.move_placed('i1c9')).to be false
+            expect(game.move_placed('a2a5')).to be false
         end
 
         it 'returns false if desired move puts king in danger' do
@@ -126,7 +127,7 @@ describe Game do
         end
 
         it 'places the move if it is valid and returns true' do
-            # todo
+            expect(game.move_placed('b2b4')).to be true
         end
     end
 end
