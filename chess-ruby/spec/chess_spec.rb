@@ -123,7 +123,10 @@ describe Game do
         end
 
         it 'returns false if desired move puts king in danger' do
-            # todo
+            game.move_placed('e2e4')
+            game.move_placed('f7f5')
+            game.move_placed('d1h5')
+            expect(game.move_placed('h7h6')).to be false 
         end
 
         it 'places the move if it is valid and returns true' do

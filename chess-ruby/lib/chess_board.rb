@@ -34,7 +34,13 @@ class Board
 
     def print_board
         tmp = self.board
+        print "   "
+        for i in ('a'..'h').to_a
+            print " " + i + " "
+        end
+        print "\n"
         for i in 1..8
+            print " " + "#{9-i}" + " "
             for j in (0..7).step(2)
                 if i.odd?
                     print tmp[-(i)][j].symbol.colorize( :background => :white)
@@ -44,7 +50,13 @@ class Board
                     print tmp[-(i)][j + 1].symbol.colorize( :background => :white)
                 end
             end
+            print " " + "#{9-i}" + " "
             print "\n"
         end
+        print "   "
+        for i in ('a'..'h').to_a
+            print " " + i + " "
+        end
+        print "\n"
     end
 end
