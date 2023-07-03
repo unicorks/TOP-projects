@@ -1,7 +1,7 @@
 class Pawn
     attr_accessor :color, :symbol, :board, :move_history, :direction
 
-    def initialize(color, board, initial_pos)
+    def initialize(color, board, initial_pos=nil)
         @color =  color
         @move_history = [initial_pos]
         @board = board
@@ -34,7 +34,7 @@ end
 class Knight
     attr_accessor :color, :symbol, :board, :move_history
 
-    def initialize(color, board, initial_pos)
+    def initialize(color, board, initial_pos=nil)
         @color =  color
         @move_history = [initial_pos]
         @board = board
@@ -63,7 +63,7 @@ end
 class Bishop
     attr_accessor :color, :symbol, :board, :move_history
 
-    def initialize(color, board, initial_pos)
+    def initialize(color, board, initial_pos=nil)
         @color =  color
         @move_history = [initial_pos]
         @board = board
@@ -119,7 +119,7 @@ end
 class Rook
     attr_accessor :color, :symbol, :board, :move_history
 
-    def initialize(color, board, initial_pos)
+    def initialize(color, board, initial_pos=nil)
         @color =  color
         @move_history = [initial_pos]        
         @board = board
@@ -173,7 +173,7 @@ end
 class Queen
     attr_accessor :color, :symbol, :board, :move_history
 
-    def initialize(color, board, initial_pos)
+    def initialize(color, board, initial_pos=nil)
         @color =  color
         @move_history = [initial_pos]
         @board = board
@@ -195,7 +195,7 @@ end
 class King
     attr_accessor :color, :symbol, :board, :move_history
 
-    def initialize(color, board, initial_pos)
+    def initialize(color, board, initial_pos=nil)
         @color =  color
         @move_history = [initial_pos]
         @board = board

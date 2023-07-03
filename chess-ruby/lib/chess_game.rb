@@ -1,5 +1,6 @@
 require_relative 'chess_board'
 require_relative 'chess_player'
+require 'json'
 
 # MAJOR BUGS/TODO : test for stalemate, serialisation
 
@@ -37,8 +38,10 @@ class Game
                     exit
                 end
             end
+
             puts "Enter your move, #{turn.name} {#{turn.color.upcase}}"
             move = gets.chomp
+            save_game if move == 'SAVE'
             # check if move is valid
             switch_turn if move_placed(move)
         end
@@ -122,6 +125,84 @@ class Game
         end
         return !(e.any?(true))
     end
+
+    def save_game
+        # serialise obj state here and save to dir
+        dirname = 'saved'
+        Dir.mkdir(dirname) unless Dir.exist?(dirname)
+        while true
+          puts 'Enter name to use to save the game: '
+          name = gets.chomp
+          if File.exist?("#{dirname}/#{name}.json")
+            puts 'Game already exists.'
+            next
+          else
+            break
+          end
+        end
+        game_info = {player_1: {name: player_1.name, color: player_1.color}, 
+        player_2: {name: player_2.name, color: player_2.color},
+        turn: turn.color,  
+        board: [] # this is the buggy part
+        }
+        b = board.board
+        for i in 0..7
+            for j in 0..7
+                if b[i][j].is_a?(EmptyPlace)
+                    game_info[:board][i][j] = {type: b[i][j].class.name.to_s}
+                else
+                    game_info[:board][i][j] = {color: b[i][j].color, type: b[i][j].class.name.to_s, move_history: b[i][j].move_history }
+                end
+            end
+        end
+        json_string = JSON.dump(game_info)
+        File.open("#{dirname}/#{name}.json", 'w') { |f| f.write(json_string) }
+        puts 'Saved. Thankyou for playing!'
+        exit
+      end
+
+      def self.load_game
+        dirname = 'saved'
+        while true
+          puts 'Enter game name: '
+          name = gets.chomp
+          break if File.exist?("#{dirname}/#{name}.json")
+        end
+        data = JSON.load(File.open("#{dirname}/#{name}.json", 'r', &:read))
+        File.delete("#{dirname}/#{name}.json")
+        # todo
+        game = Game.new(Player.new(data['player_1'][:name], data['player_1'][:color]), Player.new(data['player_2'][:name], data['player_2'][:color]))
+        game.turn = data['turn'] == game.player_1.color ? player_1 : player_2
+        b = data['board']
+        gb = game.board.board
+        for i in 0..7
+            for j in 0..7
+                if b[i][j][:type] == 'EmptyPlace'
+                    gb[i][j] = EmptyPlace.new
+                elsif b[i][j][:type] == 'Pawn'
+                    gb[i][j] = Pawn.new(b[i][j][:color], game.board)
+                    gb[i][j].move_history = b[i][j][:move_history]
+                elsif b[i][j][:type] == 'Knight'
+                    gb[i][j] = Knight.new(b[i][j][:color], game.board)
+                    gb[i][j].move_history = b[i][j][:move_history]
+                elsif b[i][j][:type] == 'Rook'
+                    gb[i][j] = Rook.new(b[i][j][:color], game.board)
+                    gb[i][j].move_history = b[i][j][:move_history]
+                elsif b[i][j][:type] == 'Bishop'
+                    gb[i][j] = Bishop.new(b[i][j][:color], game.board)
+                    gb[i][j].move_history = b[i][j][:move_history]
+                elsif b[i][j][:type] == 'Queen'
+                    gb[i][j] = Queen.new(b[i][j][:color], game.board)
+                    gb[i][j].move_history = b[i][j][:move_history]
+                elsif b[i][j][:type] == 'King'
+                    gb[i][j] = King.new(b[i][j][:color], game.board)
+                    gb[i][j].move_history = b[i][j][:move_history]
+                end
+            end
+        end
+        game.board.board = gb
+        game
+    end
 end
 
 def start
@@ -137,7 +218,7 @@ def start
         puts "Looks like you don't wanna play :("
         exit
     end
-    game = e == '0' ? load_game : Game.new
+    game = e == '0' ? Game.load_game : Game.new
     game.get_move
 end
 
