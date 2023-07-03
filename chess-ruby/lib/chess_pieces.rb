@@ -244,16 +244,16 @@ class King
 
     def self_team_valid_moves
         b = board.board
-        moves = []
+        moves = {}
         for i in 0..7
             for j in 0..7
                 if b[i][j].color == self.color
                     e = b[i][j].valid_moves
-                    moves << e
+                    moves[[i, j]] = e
                 end
             end
         end
-        moves.flatten(1)
+        moves
     end
 end
 
