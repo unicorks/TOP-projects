@@ -2,7 +2,7 @@ require_relative 'chess_board'
 require_relative 'chess_player'
 require 'json'
 
-# MAJOR BUGS/TODO : test for stalemate, serialisation
+# TODO : test for stalemate if free
 
 class Game
     attr_accessor :player_1, :player_2, :board, :turn, :white_king, :black_king
@@ -143,7 +143,7 @@ class Game
         game_info = {player_1: {name: player_1.name, color: player_1.color}, 
         player_2: {name: player_2.name, color: player_2.color},
         turn: turn.color,  
-        board: [] # this is the buggy part
+        board: Array.new(8) { Array.new(8, "")}
         }
         b = board.board
         for i in 0..7
@@ -170,33 +170,32 @@ class Game
         end
         data = JSON.load(File.open("#{dirname}/#{name}.json", 'r', &:read))
         File.delete("#{dirname}/#{name}.json")
-        # todo
-        game = Game.new(Player.new(data['player_1'][:name], data['player_1'][:color]), Player.new(data['player_2'][:name], data['player_2'][:color]))
-        game.turn = data['turn'] == game.player_1.color ? player_1 : player_2
+        game = Game.new(Player.new(data['player_1']['name'], data['player_1']['color']), Player.new(data['player_2']['name'], data['player_2']['color']))
+        game.turn = data['turn'] == game.player_1.color ? game.player_1 : game.player_2
         b = data['board']
         gb = game.board.board
         for i in 0..7
             for j in 0..7
-                if b[i][j][:type] == 'EmptyPlace'
+                if b[i][j]['type'] == 'EmptyPlace'
                     gb[i][j] = EmptyPlace.new
-                elsif b[i][j][:type] == 'Pawn'
-                    gb[i][j] = Pawn.new(b[i][j][:color], game.board)
-                    gb[i][j].move_history = b[i][j][:move_history]
-                elsif b[i][j][:type] == 'Knight'
-                    gb[i][j] = Knight.new(b[i][j][:color], game.board)
-                    gb[i][j].move_history = b[i][j][:move_history]
-                elsif b[i][j][:type] == 'Rook'
-                    gb[i][j] = Rook.new(b[i][j][:color], game.board)
-                    gb[i][j].move_history = b[i][j][:move_history]
-                elsif b[i][j][:type] == 'Bishop'
-                    gb[i][j] = Bishop.new(b[i][j][:color], game.board)
-                    gb[i][j].move_history = b[i][j][:move_history]
-                elsif b[i][j][:type] == 'Queen'
-                    gb[i][j] = Queen.new(b[i][j][:color], game.board)
-                    gb[i][j].move_history = b[i][j][:move_history]
-                elsif b[i][j][:type] == 'King'
-                    gb[i][j] = King.new(b[i][j][:color], game.board)
-                    gb[i][j].move_history = b[i][j][:move_history]
+                elsif b[i][j]['type'] == 'Pawn'
+                    gb[i][j] = Pawn.new(b[i][j]['color'], game.board)
+                    gb[i][j].move_history = b[i][j]['move_history']
+                elsif b[i][j]['type'] == 'Knight'
+                    gb[i][j] = Knight.new(b[i][j]['color'], game.board)
+                    gb[i][j].move_history = b[i][j]['move_history']
+                elsif b[i][j]['type'] == 'Rook'
+                    gb[i][j] = Rook.new(b[i][j]['color'], game.board)
+                    gb[i][j].move_history = b[i][j]['move_history']
+                elsif b[i][j]['type'] == 'Bishop'
+                    gb[i][j] = Bishop.new(b[i][j]['color'], game.board)
+                    gb[i][j].move_history = b[i][j]['move_history']
+                elsif b[i][j]['type'] == 'Queen'
+                    gb[i][j] = Queen.new(b[i][j]['color'], game.board)
+                    gb[i][j].move_history = b[i][j]['move_history']
+                elsif b[i][j]['type'] == 'King'
+                    gb[i][j] = King.new(b[i][j]['color'], game.board)
+                    gb[i][j].move_history = b[i][j]['move_history']
                 end
             end
         end
